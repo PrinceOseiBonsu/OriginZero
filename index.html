@@ -157,54 +157,54 @@ const COLORS = {
 const TOPICS = {
   diabetes: {
     stats: [
-      { num: "60%", label: "More likely for Black Americans to be diagnosed with Type 2 diabetes" },
-      { num: "37M",  label: "Americans living with diabetes today" },
+      { num: "60%",   label: "More likely for Black Americans to be diagnosed with Type 2 diabetes" },
+      { num: "37M",   label: "Americans living with diabetes today" },
       { num: "1930s", label: "When redlining created food deserts that persist today" },
       { num: "400yr", label: "Origin chain traced back through Wikipedia" }
     ],
     chain: [
-      { rank:1,  node:"African-American history",   score:0.0497, year:"1619",  category:"historical" },
-      { rank:2,  node:"Diet (nutrition)",            score:0.0485, year:"1800s", category:"health" },
-      { rank:3,  node:"African Americans",           score:0.0482, year:"1865",  category:"social" },
-      { rank:4,  node:"African-American diaspora",   score:0.0464, year:"1900s", category:"social" },
-      { rank:5,  node:"Healthy diet",                score:0.0387, year:"1930s", category:"health" },
-      { rank:6,  node:"Childhood obesity",           score:0.0248, year:"1960s", category:"health" },
-      { rank:7,  node:"History of diabetes",         score:0.0217, year:"1980s", category:"historical" },
-      { rank:8,  node:"Nutrition",                   score:0.0201, year:"1990s", category:"health" },
-      { rank:9,  node:"Obesity",                     score:0.0189, year:"2000s", category:"health" },
-      { rank:10, node:"Community health",            score:0.0175, year:"Today", category:"social" }
+      { rank:1,  node:"African-American history",  score:0.0497, year:"1619",  category:"historical" },
+      { rank:2,  node:"Diet (nutrition)",           score:0.0485, year:"1800s", category:"health" },
+      { rank:3,  node:"African Americans",          score:0.0482, year:"1865",  category:"social" },
+      { rank:4,  node:"African-American diaspora",  score:0.0464, year:"1900s", category:"social" },
+      { rank:5,  node:"Healthy diet",               score:0.0387, year:"1930s", category:"health" },
+      { rank:6,  node:"Childhood obesity",          score:0.0248, year:"1960s", category:"health" },
+      { rank:7,  node:"History of diabetes",        score:0.0217, year:"1980s", category:"historical" },
+      { rank:8,  node:"Nutrition",                  score:0.0201, year:"1990s", category:"health" },
+      { rank:9,  node:"Obesity",                    score:0.0189, year:"2000s", category:"health" },
+      { rank:10, node:"Community health",           score:0.0175, year:"Today", category:"social" }
     ],
     evolution: [
-      { period:"1619 — 1865",   title:"Slavery & Forced Labor",      desc:"Enslaved Africans were stripped of food sovereignty. Diets were controlled by enslavers — high calorie, low nutrition — creating metabolic patterns that persisted for generations." },
-      { period:"1865 — 1930s",  title:"Reconstruction Failure",      desc:"Freed people were denied land redistribution. Without economic stability, Black families were locked into poverty and poor nutrition." },
-      { period:"1930s — 1960s", title:"Redlining & Food Deserts",    desc:"Federal housing policy denied mortgages to Black neighborhoods. Supermarkets left, fast food arrived, and food deserts became structural." },
-      { period:"1960s — 1990s", title:"Fast Food Targeting",         desc:"Fast food companies deliberately targeted low-income minority neighborhoods. Calorie-dense, nutrient-poor food became the primary affordable option." },
-      { period:"1990s — Today", title:"Chronic Disease Crisis",      desc:"Decades of structural food insecurity culminated in Black Americans being 60% more likely to develop Type 2 diabetes than white Americans." }
+      { period:"1619 — 1865",   title:"Slavery & Forced Labor",    desc:"Enslaved Africans were stripped of food sovereignty. Diets were controlled by enslavers — high calorie, low nutrition — creating metabolic patterns that persisted for generations." },
+      { period:"1865 — 1930s",  title:"Reconstruction Failure",    desc:"Freed people were denied land redistribution. Without economic stability, Black families were locked into poverty and poor nutrition." },
+      { period:"1930s — 1960s", title:"Redlining & Food Deserts",  desc:"Federal housing policy denied mortgages to Black neighborhoods. Supermarkets left, fast food arrived, and food deserts became structural." },
+      { period:"1960s — 1990s", title:"Fast Food Targeting",       desc:"Fast food companies deliberately targeted low-income minority neighborhoods. Calorie-dense, nutrient-poor food became the primary affordable option." },
+      { period:"1990s — Today", title:"Chronic Disease Crisis",    desc:"Decades of structural food insecurity culminated in Black Americans being 60% more likely to develop Type 2 diabetes than white Americans." }
     ],
     narrative: "The disproportionate impact of Type 2 diabetes on African American and underrepresented communities has its roots in centuries of historical, social, and economic injustices. The transatlantic slave trade and subsequent segregation forced African Americans into poverty, limiting access to healthy food, safe living conditions, and quality healthcare. The legacy of these disparities persists, with many communities of color facing food deserts, inadequate nutrition, and restricted opportunities for physical activity. Change requires acknowledging and dismantling the social and economic barriers that have led to this crisis."
   },
   maternal: {
     stats: [
-      { num: "3×",   label: "Black women die in childbirth compared to white women in the US" },
+      { num: "3×",    label: "Black women die in childbirth compared to white women in the US" },
       { num: "1800s", label: "When medical experimentation on enslaved women began" },
-      { num: "700+", label: "Women die each year from pregnancy-related causes in the US" },
-      { num: "80%",  label: "Of maternal deaths are preventable with equal care access" }
+      { num: "700+",  label: "Women die each year from pregnancy-related causes in the US" },
+      { num: "80%",   label: "Of maternal deaths are preventable with equal care access" }
     ],
     chain: [
-      { rank:1,  node:"Racism in the United States", score:0.0521, year:"1619",  category:"historical" },
-      { rank:2,  node:"African-American history",    score:0.0498, year:"1800s", category:"historical" },
-      { rank:3,  node:"Maternal death",              score:0.0461, year:"1865",  category:"health" },
-      { rank:4,  node:"Health disparities",          score:0.0443, year:"1900s", category:"health" },
-      { rank:5,  node:"Poverty in the United States",score:0.0398, year:"1930s", category:"economic" },
-      { rank:6,  node:"Implicit bias",               score:0.0351, year:"1960s", category:"social" },
-      { rank:7,  node:"Prenatal care",               score:0.0312, year:"1980s", category:"health" },
-      { rank:8,  node:"Segregation",                 score:0.0287, year:"1990s", category:"historical" },
-      { rank:9,  node:"Income inequality",           score:0.0241, year:"2000s", category:"economic" },
-      { rank:10, node:"Medical discrimination",      score:0.0198, year:"Today", category:"social" }
+      { rank:1,  node:"Racism in the United States",  score:0.0521, year:"1619",  category:"historical" },
+      { rank:2,  node:"African-American history",     score:0.0498, year:"1800s", category:"historical" },
+      { rank:3,  node:"Maternal death",               score:0.0461, year:"1865",  category:"health" },
+      { rank:4,  node:"Health disparities",           score:0.0443, year:"1900s", category:"health" },
+      { rank:5,  node:"Poverty in the United States", score:0.0398, year:"1930s", category:"economic" },
+      { rank:6,  node:"Implicit bias",                score:0.0351, year:"1960s", category:"social" },
+      { rank:7,  node:"Prenatal care",                score:0.0312, year:"1980s", category:"health" },
+      { rank:8,  node:"Segregation",                  score:0.0287, year:"1990s", category:"historical" },
+      { rank:9,  node:"Income inequality",            score:0.0241, year:"2000s", category:"economic" },
+      { rank:10, node:"Medical discrimination",       score:0.0198, year:"Today", category:"social" }
     ],
     evolution: [
-      { period:"1600s — 1865",  title:"Medical Experimentation",       desc:"J. Marion Sims developed gynecological techniques by experimenting on enslaved Black women without anesthesia, building a system that disregarded Black pain." },
-      { period:"1865 — 1910s",  title:"Exclusion from Medical Training",desc:"Black physicians were denied entry to medical schools. Separate, underfunded Black hospitals formed out of necessity." },
+      { period:"1600s — 1865",  title:"Medical Experimentation",        desc:"J. Marion Sims developed gynecological techniques by experimenting on enslaved Black women without anesthesia, building a system that disregarded Black pain." },
+      { period:"1865 — 1910s",  title:"Exclusion from Medical Training", desc:"Black physicians were denied entry to medical schools. Separate, underfunded Black hospitals formed out of necessity." },
       { period:"1930s — 1960s", title:"Segregated Hospitals",           desc:"Hill-Burton Act hospitals received federal funding while legally segregating patients. Black women delivered in inferior wards with fewer resources." },
       { period:"1960s — 2000s", title:"Pain Bias Enters Practice",      desc:"Studies show medical providers systematically underestimate pain in Black patients. Pregnancy complaints are dismissed more often — a deadly pattern." },
       { period:"2000s — Today", title:"The Crisis Persists",            desc:"Black women still die in childbirth at 3x the rate of white women. The cause is documented, systemic, and traceable — not biological." }
@@ -213,22 +213,22 @@ const TOPICS = {
   },
   obesity: {
     stats: [
-      { num: "2×",   label: "Higher childhood obesity rates in low-income vs high-income communities" },
-      { num: "1934", label: "When federal redlining created today's food deserts" },
-      { num: "23.5M",label: "Americans live in food deserts with no supermarket access" },
-      { num: "40%",  label: "Of children in low-income neighborhoods are food insecure" }
+      { num: "2×",    label: "Higher childhood obesity rates in low-income vs high-income communities" },
+      { num: "1934",  label: "When federal redlining created today's food deserts" },
+      { num: "23.5M", label: "Americans live in food deserts with no supermarket access" },
+      { num: "40%",   label: "Of children in low-income neighborhoods are food insecure" }
     ],
     chain: [
-      { rank:1,  node:"Food desert",                 score:0.0534, year:"1930s", category:"economic" },
-      { rank:2,  node:"Poverty in the United States",score:0.0498, year:"1865",  category:"economic" },
-      { rank:3,  node:"Redlining",                   score:0.0467, year:"1934",  category:"historical" },
-      { rank:4,  node:"African-American history",    score:0.0441, year:"1619",  category:"historical" },
-      { rank:5,  node:"Nutrition",                   score:0.0389, year:"1950s", category:"health" },
-      { rank:6,  node:"Fast food",                   score:0.0342, year:"1960s", category:"economic" },
-      { rank:7,  node:"Income inequality",           score:0.0298, year:"1980s", category:"economic" },
-      { rank:8,  node:"Urban disinvestment",         score:0.0261, year:"1990s", category:"social" },
-      { rank:9,  node:"School nutrition",            score:0.0224, year:"2000s", category:"health" },
-      { rank:10, node:"Community health",            score:0.0187, year:"Today", category:"social" }
+      { rank:1,  node:"Food desert",                  score:0.0534, year:"1930s", category:"economic" },
+      { rank:2,  node:"Poverty in the United States", score:0.0498, year:"1865",  category:"economic" },
+      { rank:3,  node:"Redlining",                    score:0.0467, year:"1934",  category:"historical" },
+      { rank:4,  node:"African-American history",     score:0.0441, year:"1619",  category:"historical" },
+      { rank:5,  node:"Nutrition",                    score:0.0389, year:"1950s", category:"health" },
+      { rank:6,  node:"Fast food",                    score:0.0342, year:"1960s", category:"economic" },
+      { rank:7,  node:"Income inequality",            score:0.0298, year:"1980s", category:"economic" },
+      { rank:8,  node:"Urban disinvestment",          score:0.0261, year:"1990s", category:"social" },
+      { rank:9,  node:"School nutrition",             score:0.0224, year:"2000s", category:"health" },
+      { rank:10, node:"Community health",             score:0.0187, year:"Today", category:"social" }
     ],
     evolution: [
       { period:"1619 — 1865",  title:"Controlled Food Access",         desc:"Enslaved people had no control over what they ate. Diets designed for labor output, not nutrition, created generational metabolic disadvantages." },
@@ -364,7 +364,7 @@ function renderGraph(chain) {
   });
 }
 
-loadData();
+window.addEventListener("load", () => loadData());
 </script>
 </body>
 </html>
