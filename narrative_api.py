@@ -45,12 +45,16 @@ disproportionately affects African American and underrepresented communities.
 
 Focus on the historical, social, and economic root causes — not biology or genetics.
 {TONE_INSTRUCTIONS[tone]}
+
+After the story, add a section titled "Key Facts:" followed by exactly 3 short
+bullet points (using "-") stating concrete facts about {topic} as it relates to
+African American communities.
 """
 
     response = client.chat.completions.create(
         model="llama-3.3-70b-versatile",
         messages=[{"role": "user", "content": prompt}],
-        max_tokens=300
+        max_tokens=400
     )
 
     return response.choices[0].message.content
