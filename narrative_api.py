@@ -9,6 +9,22 @@ client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
 TOPICS = ["Type 2 Diabetes", "Maternal Mortality", "Childhood Obesity"]
 
+TONE_INSTRUCTIONS = {
+    "academic": (
+        "Write in a formal, research-style tone suitable for scholars and public health "
+        "researchers. Use precise, analytical language and frame the explanation as if "
+        "introducing a peer-reviewed paper."
+    ),
+    "emotional": (
+        "Write in a powerful, personal, and moving tone suitable for the general public. "
+        "Make it compelling and emotionally resonant while staying factual."
+    ),
+    "simple": (
+        "Write in simple, easy-to-understand language suitable for kids and students. "
+        "Avoid jargon, use short sentences, and explain ideas plainly."
+    ),
+}
+
 app = Flask(__name__)
 
 with open("origin_chain.json", "r") as f:
@@ -17,7 +33,7 @@ with open("origin_chain.json", "r") as f:
 nodes = [item["node"] for item in chain]
 
 
-def generate_narrative(topic):
+def generate_narrative(topic, tone="emotional"):
     prompt = f"""
 You are OriginZero, an AI that traces the historical root causes of health disparities.
 
@@ -28,7 +44,7 @@ Write a powerful 150-word origin story explaining why {topic}
 disproportionately affects African American and underrepresented communities.
 
 Focus on the historical, social, and economic root causes — not biology or genetics.
-Make it clear, compelling, and suitable for a general audience.
+{TONE_INSTRUCTIONS[tone]}
 """
 
     response = client.chat.completions.create(
@@ -43,12 +59,16 @@ Make it clear, compelling, and suitable for a general audience.
 @app.route("/narrative", methods=["GET"])
 def narrative():
     topic = request.args.get("topic", "Type 2 Diabetes")
+    tone = request.args.get("tone", "emotional")
 
     if topic not in TOPICS:
         return jsonify({"error": f"Unknown topic: {topic!r}. Choose from {TOPICS}"}), 400
 
-    text = generate_narrative(topic)
-    return jsonify({"topic": topic, "narrative": text})
+    if tone not in TONE_INSTRUCTIONS:
+        return jsonify({"error": f"Unknown tone: {tone!r}. Choose from {list(TONE_INSTRUCTIONS)}"}), 400
+
+    text = generate_narrative(topic, tone)
+    return jsonify({"topic": topic, "tone": tone, "narrative": text})
 
 
 if __name__ == "__main__":

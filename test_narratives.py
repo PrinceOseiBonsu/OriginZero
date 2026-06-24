@@ -1,17 +1,22 @@
-import shutil
-import subprocess
-import sys
+from narrative_api import generate_narrative
 
-TOPICS = {
-    "Type 2 Diabetes": "narrative_diabetes.txt",
-    "Maternal Mortality": "narrative_maternal.txt",
-    "Childhood Obesity": "narrative_obesity.txt",
+TOPIC_SLUGS = {
+    "Type 2 Diabetes": "diabetes",
+    "Maternal Mortality": "maternal",
+    "Childhood Obesity": "obesity",
 }
 
-for topic, output_file in TOPICS.items():
-    print(f"Running narrative.py for topic: {topic}")
-    subprocess.run([sys.executable, "narrative.py", topic], check=True)
-    shutil.copyfile("narrative.txt", output_file)
-    print(f"Saved to {output_file}\n")
+TONES = ["academic", "emotional", "simple"]
+
+for topic, topic_slug in TOPIC_SLUGS.items():
+    for tone in TONES:
+        print(f"Generating narrative for topic: {topic} | tone: {tone}")
+        narrative = generate_narrative(topic, tone)
+
+        output_file = f"narrative_{topic_slug}_{tone}.txt"
+        with open(output_file, "w") as f:
+            f.write(narrative)
+
+        print(f"Saved to {output_file}\n")
 
 print("All narratives generated.")
