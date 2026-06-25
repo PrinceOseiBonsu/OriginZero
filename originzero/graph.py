@@ -1,9 +1,10 @@
 import json
+import os
 import networkx as nx
 import matplotlib.pyplot as plt
 
 # Load the crawled data
-with open("data.json", "r") as f:
+with open(os.path.join(os.path.dirname(__file__), "../data.json"), "r") as f:
     data = json.load(f)
 
 # Build the graph
@@ -66,7 +67,7 @@ for i, (node, score) in enumerate(filtered[:10]):
 output = [{"rank": i+1, "node": node, "score": round(score, 4)} 
           for i, (node, score) in enumerate(filtered[:10])]
 
-with open("origin_chain.json", "w") as f:
+with open(os.path.join(os.path.dirname(__file__), "../data_chains/diabetes_chain.json"), "w") as f:
     json.dump(output, f, indent=2)
 
-print("\nOrigin chain saved to origin_chain.json")
+print("\nDiabetes chain saved to data_chains/diabetes_chain.json")

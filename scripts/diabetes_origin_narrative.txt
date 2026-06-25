@@ -1,0 +1,8 @@
+--- SYSTEM METADATA ---
+Instruction: Analyze the underlying social, institutional, and root causes linking to 'Type 2 diabetes' using the extracted knowledge graph relationships and source text.
+Parameters: Temp=0.3, Tokens=256
+-----------------------
+
+Type 2 diabetes is a complex condition with far-reaching social, institutional, and root causes, among which a low-carbohydrate diet, a low-fat diet, and weight loss are critically important. The systemic link between type 2 diabetes and a low-carbohydrate diet is evident, with a network weight score of 0.2451, highlighting the importance of dietary changes in managing this condition. A low-fat diet also plays a significant role, with a network weight score of 0.1892, underscoring the need for careful consideration of dietary fat intake in the context of type 2 diabetes. Furthermore, weight loss is a crucial component in the management of type 2 diabetes, with a network weight score of 0.1143, as it can help to improve insulin sensitivity and reduce the risk of developing type 2 diabetes.
+
+The symptoms of type 2 diabetes, including increased thirst, frequent urination, fatigue, and unexplained weight loss, are often linked to a lack of insulin and insulin resistance. These symptoms can be debilitating, affecting an individual's quality of life and overall well-being. The interconnectedness of diet, weight loss, and type 2 diabetes management is evident,

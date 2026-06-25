@@ -16,7 +16,7 @@ if topic not in TOPICS:
     raise ValueError(f"Unknown topic: {topic!r}. Choose from {TOPICS}")
 
 # Load origin chain
-with open("origin_chain.json", "r") as f:
+with open("./data_chains/diabetes_chain.json", "r") as f:
     chain = json.load(f)
 
 nodes = [item["node"] for item in chain]

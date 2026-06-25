@@ -1,0 +1,62 @@
+[
+  {
+    "rank": 1,
+    "node": "African-American history",
+    "score": 0.0497,
+    "year": "1619"
+  },
+  {
+    "rank": 2,
+    "node": "Diet (nutrition)",
+    "score": 0.0485,
+    "year": "1890s"
+  },
+  {
+    "rank": 3,
+    "node": "African Americans",
+    "score": 0.0482,
+    "year": "1619"
+  },
+  {
+    "rank": 4,
+    "node": "African-American diaspora",
+    "score": 0.0464,
+    "year": "1500s"
+  },
+  {
+    "rank": 5,
+    "node": "African Americans in Africa",
+    "score": 0.0464,
+    "year": "1822"
+  },
+  {
+    "rank": 6,
+    "node": "Healthy diet",
+    "score": 0.0387,
+    "year": "1977"
+  },
+  {
+    "rank": 7,
+    "node": "British African-Caribbean people",
+    "score": 0.0289,
+    "year": "1948"
+  },
+  {
+    "rank": 8,
+    "node": "DASH diet",
+    "score": 0.0278,
+    "year": "1997"
+  },
+  {
+    "rank": 9,
+    "node": "Childhood obesity",
+    "score": 0.0248,
+    "year": "1980"
+  },
+  {
+    "rank": 10,
+    "node": "Dietary fiber",
+    "score": 0.0217,
+    "year": "1953"
+  }
+]
