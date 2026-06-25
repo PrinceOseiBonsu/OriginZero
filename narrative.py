@@ -7,16 +7,20 @@ from dotenv import load_dotenv
 load_dotenv()
 client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
-TOPICS = ["Type 2 Diabetes", "Maternal Mortality", "Childhood Obesity"]
+TOPIC_CHAIN_FILES = {
+    "Type 2 Diabetes": "./data_chains/diabetes_chain.json",
+    "Maternal Mortality": "./data_chains/maternal_mortality_chain.json",
+    "Childhood Obesity": "./data_chains/childhood_obesity_chain.json",
+}
 
 # Change this to switch topics, or pass one as a command-line argument.
 topic = sys.argv[1] if len(sys.argv) > 1 else "Type 2 Diabetes"
 
-if topic not in TOPICS:
-    raise ValueError(f"Unknown topic: {topic!r}. Choose from {TOPICS}")
+if topic not in TOPIC_CHAIN_FILES:
+    raise ValueError(f"Unknown topic: {topic!r}. Choose from {list(TOPIC_CHAIN_FILES)}")
 
 # Load origin chain
-with open("./data_chains/diabetes_chain.json", "r") as f:
+with open(TOPIC_CHAIN_FILES[topic], "r") as f:
     chain = json.load(f)
 
 nodes = [item["node"] for item in chain]

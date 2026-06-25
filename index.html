@@ -281,6 +281,8 @@
     .chain-fill { height: 100%; border-radius: 9999px; transition: width 0.5s ease-out; }
     
     .narrative-section { background: #FFFFFF; border: 1px solid #E2E8F0; }
+    .tone-bar { display: flex; gap: 8px; margin-bottom: 1rem; }
+    .tone-btn { padding: 8px 16px; font-size: 12px; }
     .narrative-text { 
       font-size: 14px; 
       line-height: 1.7; 
@@ -334,7 +336,7 @@
   <div class="main">
     <div class="left">
       <div class="card-panel">
-        <div class="section-label">Knowledge Graph Engine — 60 nodes · 474 edges</div>
+        <div class="section-label" id="graph-section-label">Knowledge Graph Engine</div>
         <div id="graph-container"></div>
         <div class="zoom-hint">Scroll to zoom · Drag canvas to pan · Drag individual elements to reorganize layout</div>
         <div class="legend">
@@ -366,6 +368,11 @@
       
       <div class="card-panel narrative-section">
         <div class="section-label">AI-Generated Origin Narrative</div>
+        <div class="tone-bar" id="tone-bar">
+          <button type="button" class="topic-btn tone-btn" data-tone="emotional" onclick="selectTone('emotional', this)">Emotional</button>
+          <button type="button" class="topic-btn tone-btn" data-tone="academic" onclick="selectTone('academic', this)">Academic</button>
+          <button type="button" class="topic-btn tone-btn" data-tone="simple" onclick="selectTone('simple', this)">Simple</button>
+        </div>
         <p class="narrative-text" id="narrative-text"></p>
       </div>
       
@@ -391,11 +398,19 @@
 
 <script>
 const COLORS = {
-  historical: "#EF4444", 
-  economic:   "#F59E0B", 
-  health:     "#10B981", 
-  social:     "#3B82F6"  
+  historical: "#EF4444",
+  economic:   "#F59E0B",
+  health:     "#10B981",
+  social:     "#3B82F6"
 };
+
+const NARRATIVE_API = "http://127.0.0.1:5000/narrative";
+const TOPIC_API_NAMES = {
+  diabetes: "Type 2 Diabetes",
+  maternal: "Maternal Mortality",
+  obesity: "Childhood Obesity"
+};
+let currentTone = "emotional";
 
 function extimate_category_based_on_node_name(node_name) {
   const name = node_name.toLowerCase();
@@ -449,10 +464,10 @@ async function initApplication() {
     TOPICS = {
       diabetes: {
         stats: [
-          { num: "60%", label: "Increased systemic variant risk profile indicators for targeted demographics." },
-          { num: "37M",  label: "Active case instances currently managed across domestic tracking boundaries." },
-          { num: "1930s", label: "Initial spatial layout design vector maps creating modern food deserts." },
-          { num: "400y", label: "Temporal timeline tracking depth navigated via connection engine paths." }
+          { num: "60%", label: "Higher likelihood of developing Type 2 diabetes for Black Americans compared to white Americans." },
+          { num: "37M",  label: "Americans currently living with diagnosed diabetes nationwide." },
+          { num: "1930s", label: "Decade redlining maps began creating the food deserts still present today." },
+          { num: "400y", label: "Years traced back through the origin chain, from slavery-era diets to today's crisis." }
         ],
         chain: diabetes_chain_raw,
         evolution: [
@@ -466,10 +481,10 @@ async function initApplication() {
       },
       maternal: {
         stats: [
-          { num: "3×",   label: "Mortality differential factor recorded within core clinical delivery fields." },
-          { num: "1800s", label: "Historical foundation tracking baseline for clinical processing testing." },
-          { num: "700+", label: "Preventable structural events recorded across operational system cycles." },
-          { num: "80%",  label: "Preventable variance threshold capacity with equitable optimization." }
+          { num: "3x",   label: "Higher maternal death rate for Black women compared to white women." },
+          { num: "1800s", label: "Era when J. Marion Sims developed gynecological techniques on enslaved women." },
+          { num: "700+", label: "Pregnancy-related deaths recorded annually in the US." },
+          { num: "80%",  label: "Of pregnancy-related deaths are considered preventable." }
         ],
         chain: maternal_chain_raw,
         evolution: [
@@ -483,10 +498,10 @@ async function initApplication() {
       },
       obesity: {
           stats: [
-            { num: "2×",   label: "Observed condition distribution matrix factor within low-resource sectors." },
-            { num: "1934", label: "Initial structural policy deployment mapping resource distribution lanes." },
-            { num: "23.5M",label: "Total pop metrics currently operating under localized geographic desert parameters." },
-            { num: "40%",  label: "Systemic food security variance thresholds flagged across development fields." }
+            { num: "2x",   label: "Higher obesity rate for children in food deserts versus affluent peers." },
+            { num: "1934", label: "Year federal redlining maps began excluding Black neighborhoods from investment." },
+            { num: "23.5M",label: "Americans living in food deserts with limited access to fresh groceries." },
+            { num: "40%",  label: "Of low-income households report food insecurity affecting their children." }
           ],
           chain: obesity_chain_raw,
           evolution: [
@@ -504,12 +519,18 @@ async function initApplication() {
 
   } catch (error) {
     console.error("Failed to fetch or process chain data:", error);
+    document.querySelector(".main").innerHTML = `
+      <div class="card-panel" style="grid-column: 1 / -1; text-align:center;">
+        <div class="section-label">Something Went Wrong</div>
+        <p style="color:#475569; font-size:14px;">Couldn't load the knowledge graph data. Make sure you're running this through a local server (not opening the file directly), and that the data_chains/ and narratives/ files exist.</p>
+      </div>`;
   }
 }
 
 function selectTopic(topic, btn) {
   currentTopic = topic;
-  document.querySelectorAll(".topic-btn").forEach(b => b.classList.remove("active"));
+  currentTone = "emotional";
+  document.querySelectorAll(".topic-bar .topic-btn").forEach(b => b.classList.remove("active"));
   if (btn) btn.classList.add("active");
   loadData();
 }
@@ -524,6 +545,36 @@ function loadData() {
   renderTimeline(data.chain);
   renderEvolution(data.evolution);
   renderGraph(data.chain);
+  updateToneButtonsActive();
+}
+
+function updateToneButtonsActive() {
+  document.querySelectorAll(".tone-btn").forEach(b => {
+    b.classList.toggle("active", b.dataset.tone === currentTone);
+  });
+}
+
+async function selectTone(tone, btn) {
+  currentTone = tone;
+  document.querySelectorAll(".tone-btn").forEach(b => b.classList.remove("active"));
+  if (btn) btn.classList.add("active");
+
+  const narrativeEl = document.getElementById("narrative-text");
+  const previousText = narrativeEl.textContent;
+  document.getElementById("narrative-error")?.remove();
+  narrativeEl.textContent = "Generating narrative...";
+
+  try {
+    const topic = TOPIC_API_NAMES[currentTopic];
+    const res = await fetch(`${NARRATIVE_API}?topic=${encodeURIComponent(topic)}&tone=${encodeURIComponent(tone)}`);
+    if (!res.ok) throw new Error(`API returned ${res.status}`);
+    const data = await res.json();
+    renderNarrative(data.narrative);
+  } catch (error) {
+    console.error("Failed to generate live narrative:", error);
+    narrativeEl.textContent = previousText;
+    narrativeEl.insertAdjacentHTML("afterend", `<p id="narrative-error" style="color:#EF4444; font-size:12px; margin-top:8px;">Couldn't reach the narrative API at ${NARRATIVE_API} — showing the cached narrative instead.</p>`);
+  }
 }
 
 function renderStats(stats) {
@@ -578,7 +629,9 @@ function renderEvolution(evolution) {
 }
 
 function renderGraph(chain) {
-  
+  document.getElementById("graph-section-label").textContent =
+    `Knowledge Graph Engine — Top ${chain.length} Origin Chain Nodes`;
+
   const container = document.getElementById("graph-container");
   container.innerHTML = "";
   const width = container.offsetWidth;
