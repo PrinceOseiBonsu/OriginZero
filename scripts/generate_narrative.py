@@ -44,7 +44,7 @@ def query_origin_narrative(instruction, context, max_tokens=300, temperature=0.3
         
         # 4. Present generated text cleanly on screen
         print("\n" + "="*60)
-        print("🎉 AI-GENERATED ORIGIN NARRATIVE DETECTED:")
+        print("AI-GENERATED ORIGIN NARRATIVE DETECTED:")
         print("="*60)
         print(narrative_output)
         print("="*60 + "\n")

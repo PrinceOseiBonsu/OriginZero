@@ -18,7 +18,7 @@ for article, content in data.items():
 print(f"Nodes: {G.number_of_nodes()}")
 print(f"Edges: {G.number_of_edges()}")
 
-# 3. Create a Structurally Unbiased Personalization Vector
+# 3. Create a Structurally Personalization Vector
 # Seeds are balanced across 4 key pillars to prevent algorithmic bias toward a single perspective:
 # (1) Core epidemiology, (2) Socioeconomic/Built environment, (3) Nutritional/Commercial policy, (4) Biology/Pediatrics
 SEED_TOPICS = [
@@ -32,7 +32,7 @@ SEED_TOPICS = [
     "public health policy", "nutrition education", "school meal programs",
     
     # 4. Metabolic & Pediatric Physiology
-    "pediatric nutrition", "metabolism", "child development"
+    "pediatric nutrition", "metabolism", "child development", "underrepresented communities"
 ]
 
 # Find which seed topics actually exist in your crawled graph
@@ -59,17 +59,17 @@ pagerank_scores = nx.pagerank(G, alpha=0.85, personalization=personalization_dic
 ranked = sorted(pagerank_scores.items(), key=lambda x: x[1], reverse=True)
 
 # 6. Print the top results
-print("\n--- TOP 20 STRUCTURALLY RELEVANT CHILDHOOD OBESITY NODES ---")
-for i, (node, score) in enumerate(ranked[:20]):
+print("\n--- TOP 10 STRUCTURALLY RELEVANT CHILDHOOD OBESITY NODES ---")
+for i, (node, score) in enumerate(ranked[:10]):
     print(f"{i+1}. {node} (score: {round(score, 6)})")
 
 # 7. Save to JSON
 output = [
     {"rank": i+1, "node": node, "score": round(score, 6)} 
-    for i, (node, score) in enumerate(ranked[:20])
+    for i, (node, score) in enumerate(ranked[:10])
 ]
 
-output_path = os.path.join(os.path.dirname(__file__), "../childhood_obesity_chain.json")
+output_path = os.path.join(os.path.dirname(__file__), "../data_chains/childhood_obesity_chain.json")
 with open(output_path, "w") as f:
     json.dump(output, f, indent=2)
 

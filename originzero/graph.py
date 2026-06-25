@@ -59,15 +59,15 @@ filtered = [
 # Re-sort after boosting
 filtered = sorted(filtered, key=lambda x: x[1], reverse=True)
 
-print("\n--- TOP 20 ORIGIN CAUSE NODES ---")
-for i, (node, score) in enumerate(filtered[:20]):
+print("\n--- TOP 10 ORIGIN CAUSE NODES ---")
+for i, (node, score) in enumerate(filtered[:10]):
     print(f"{i+1}. {node} (score: {round(score, 4)})")
 
 # Save ranked chain to JSON for Person 4
 output = [{"rank": i+1, "node": node, "score": round(score, 4)} 
-          for i, (node, score) in enumerate(filtered[:20])]
+          for i, (node, score) in enumerate(filtered[:10])]
 
-with open(os.path.join(os.path.dirname(__file__), "../origin_chain.json"), "w") as f:
+with open(os.path.join(os.path.dirname(__file__), "../data_chains/diabetes_chain.json"), "w") as f:
     json.dump(output, f, indent=2)
 
-print("\nOrigin chain saved to origin_chain.json")
+print("\nDiabetes chain saved to data_chains/diabetes_chain.json")

@@ -18,12 +18,12 @@ for article, content in data.items():
 print(f"Nodes: {G.number_of_nodes()}")
 print(f"Edges: {G.number_of_edges()}")
 
-# 3. Create an Unbiased Personalization Vector
+# 3. Create an Personalization Vector
 # Define the core "seed" topics that define what maternal mortality is.
 # This guides the algorithm structurally rather than artificially boosting final scores.
 SEED_TOPICS = [
     "maternal mortality", "maternal health", "pregnancy", 
-    "obstetrics", "postpartum period"
+    "obstetrics", "postpartum period", "underrepresented communities"
 ]
 
 # Find which seed topics actually exist in your crawled graph
@@ -49,17 +49,17 @@ pagerank_scores = nx.pagerank(G, alpha=0.85, personalization=personalization_dic
 ranked = sorted(pagerank_scores.items(), key=lambda x: x[1], reverse=True)
 
 # 6. Print the top results
-print("\n--- TOP 20 STRUCTURALLY RELEVANT MATERNAL HEALTH NODES ---")
-for i, (node, score) in enumerate(ranked[:20]):
+print("\n--- TOP 10 STRUCTURALLY RELEVANT MATERNAL HEALTH NODES ---")
+for i, (node, score) in enumerate(ranked[:10]):
     print(f"{i+1}. {node} (score: {round(score, 6)})")
 
 # 7. Save to JSON
 output = [
     {"rank": i+1, "node": node, "score": round(score, 6)} 
-    for i, (node, score) in enumerate(ranked[:20])
+    for i, (node, score) in enumerate(ranked[:10])
 ]
 
-output_path = os.path.join(os.path.dirname(__file__), "../maternal_mortality_chain.json")
+output_path = os.path.join(os.path.dirname(__file__), "../data_chains/maternal_mortality_chain.json")
 with open(output_path, "w") as f:
     json.dump(output, f, indent=2)
 

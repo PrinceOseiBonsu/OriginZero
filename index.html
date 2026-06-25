@@ -5,243 +5,507 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>OriginZero — Trace the Root</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700;800&family=Source+Code+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Source+Code+Pro:wght@300;400;600;700&display=swap');
+    
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Inter', sans-serif; background: #F5F0E8; color: #2C2C2A; }
-    header { padding: 1.2rem 2.5rem; display: flex; justify-content: space-between; align-items: center; background: #2C2C2A; }
-    .logo { font-family: 'Playfair Display', serif; font-size: 22px; color: #F5F0E8; letter-spacing: 1px; }
-    .logo span { color: #C8A96E; }
-    .tagline { font-size: 12px; color: #888780; }
-    .hero { padding: 2.5rem 2.5rem 2rem; border-bottom: 1px solid #D3D1C7; background: #EDE8DC; }
-    .hero h1 { font-family: 'Playfair Display', serif; font-size: 38px; line-height: 1.2; color: #2C2C2A; max-width: 580px; margin-bottom: 0.8rem; }
-    .hero h1 em { color: #854F0B; font-style: normal; }
-    .hero p { font-size: 14px; color: #5F5E5A; max-width: 500px; line-height: 1.7; margin-bottom: 1.5rem; }
+    
+    body { 
+      font-family: 'Google Sans Code','Quicksand', 'Source Code Pro', monospace; 
+      background: #EAEFF8; 
+      color: #0B132B; 
+      -webkit-font-smoothing: antialiased;
+      padding: 2rem;
+    }
+
+    /* Main Container Blueprint matching the mock layout wrapper */
+    .app-container {
+      max-width: none;
+      margin: 0 auto;
+      background: #FFFFFF;
+      border-radius: 32px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(11, 19, 43, 0.08);
+      border: 8px solid #FFFFFF;
+    }
+    
+    header { 
+      padding: 2rem 3rem 1.5rem; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      background: #FFFFFF;
+    }
+    
+    .logo { 
+      font-size: 22px; 
+      font-weight: 800;
+      color: #0F172A; 
+      letter-spacing: -1px; 
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .logo span { color: #2A7BFF; }
+    
+    .tagline { 
+      font-size: 11px; 
+      font-weight: 700;
+      color: #4F46E5; 
+      background: #EEF2FF;
+      padding: 6px 16px;
+      border-radius: 9999px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    
+    /* Hero section featuring the signature fluid abstract gradient mesh from mock_ui_3 */
+    .hero { 
+      position: relative;
+      margin: 0 1.5rem;
+      padding: 5rem 4rem; 
+      border-radius: 28px;
+      background: rgb(212,233,255);
+      background: radial-gradient(circle at 80% 20%, rgba(224,242,254,1) 0%, rgba(186,230,253,0.8) 30%, rgba(239,246,255,1) 70%, rgba(219,234,254,0.9) 100%);
+      overflow: hidden;
+    }
+
+    /* Abstract fluid vector waves recreated with CSS */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -20%; right: -10%;
+      width: 70%; height: 140%;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.25) 0%, rgba(147, 51, 234, 0.1) 100%);
+      border-radius: 43% 57% 41% 59% / 54% 43% 57% 46%;
+      transform: rotate(-15deg);
+      z-index: 1;
+      filter: blur(40px);
+    }
+    
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 750px;
+    }
+
+    .hero h1 { 
+      font-size: 56px; 
+      font-weight: 800;
+      line-height: 1.1; 
+      color: #0F172A; 
+      margin-bottom: 1.5rem; 
+      letter-spacing: -0.03em;
+    }
+    
+    .hero h1 em { 
+      font-style: normal;
+      background: #FFFFFF;
+      padding: 4px 20px;
+      border-radius: 9999px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .hero p { 
+      font-size: 16px; 
+      color: #334155; 
+      max-width: 580px; 
+      line-height: 1.6; 
+      margin-bottom: 2.5rem; 
+      font-weight: 500;
+    }
+    
     .topic-bar { display: flex; gap: 10px; flex-wrap: wrap; }
-    .topic-btn { padding: 8px 20px; border-radius: 4px; border: 1px solid #B4B2A9; font-size: 13px; cursor: pointer; background: #F5F0E8; color: #5F5E5A; font-family: 'Inter', sans-serif; transition: all 0.2s; }
-    .topic-btn:hover { border-color: #854F0B; color: #854F0B; }
-    .topic-btn.active { background: #2C2C2A; color: #F5F0E8; border-color: #2C2C2A; font-weight: 500; }
-    .main { display: grid; grid-template-columns: 1.2fr 1fr; align-items: start; }
-    .left { border-right: 1px solid #D3D1C7; }
-    .right { background: #FAF8F3; }
-    .section { padding: 1.5rem 2rem; border-bottom: 1px solid #D3D1C7; }
-    .section-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: #B4B2A9; margin-bottom: 1rem; }
-    #graph-container { width: 100%; height: 550px; background: #fff; border: 1px solid #D3D1C7; border-radius: 6px; overflow: hidden; cursor: grab; }
+    
+    /* Pill buttons designed like the premium navigation blocks */
+    .topic-btn { 
+      padding: 12px 28px; 
+      border-radius: 9999px; 
+      border: 1px solid rgba(15, 23, 42, 0.08); 
+      font-size: 14px; 
+      font-weight: 600;
+      cursor: pointer; 
+      background: #FFFFFF; 
+      color: #0F172A; 
+      font-family: 'Inter', sans-serif; 
+      transition: all 0.2s ease; 
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+    
+    .topic-btn:hover { 
+      background: #F8FAFC;
+      transform: translateY(-1px);
+    }
+    
+    .topic-btn.active { 
+      background: #2A7BFF; 
+      color: #FFFFFF; 
+      border-color: #2A7BFF; 
+      box-shadow: 0 8px 20px rgba(42, 123, 255, 0.25);
+    }
+    
+    /* Grid structure imitating the staggered asymmetric look of the mock UI */
+    .main { 
+      display: grid; 
+      grid-template-columns: 1.3fr 1fr; 
+      gap: 1.5rem;
+      padding: 1.5rem; 
+    }
+    
+    .left, .right { display: flex; flex-direction: column; gap: 1.5rem; }
+    
+    .card-panel {
+      background: #F8FAFC;
+      border-radius: 24px;
+      padding: 2rem;
+      border: 1px solid #E2E8F0;
+    }
+
+    /* Emulating the hyper-vibrant bright blue container component */
+    .featured-panel {
+      background: #2A7BFF;
+      color: #FFFFFF;
+      border-radius: 24px;
+      padding: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .section-label { 
+      font-size: 11px; 
+      font-weight: 800; 
+      text-transform: uppercase; 
+      letter-spacing: 0.08em; 
+      color: #64748B; 
+      margin-bottom: 1.5rem; 
+    }
+
+    .featured-panel .section-label {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    #graph-container { 
+      width: 100%; 
+      height: 720px; 
+      background: #FFFFFF; 
+      border-radius: 20px; 
+      overflow: hidden; 
+      cursor: grab; 
+      border: 1px solid #E2E8F0;
+    }
+    
     #graph-container:active { cursor: grabbing; }
-    .zoom-hint { font-size: 11px; color: #B4B2A9; margin-top: 6px; text-align: center; }
-    .legend { display: flex; gap: 20px; flex-wrap: wrap; padding: 0.8rem 2rem; border-bottom: 1px solid #D3D1C7; background: #EDE8DC; }
-    .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #5F5E5A; }
-    .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
-    .timeline-wrap { padding: 1.5rem 2rem; border-bottom: 1px solid #D3D1C7; }
+    
+    .zoom-hint { font-size: 12px; color: #94A3B8; margin-top: 12px; text-align: center; font-weight: 500; }
+    
+    .legend { 
+      display: flex; 
+      gap: 20px; 
+      flex-wrap: wrap; 
+      padding-top: 0.5rem;
+    }
+    
+    .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; color: #475569; }
+    .legend-dot { width: 12px; height: 12px; border-radius: 4px; }
+    
+    /* Elegant clean layout for the origin lists */
+    .timeline-wrap { max-height: None; overflow-y: auto; padding-right: 10px; }
+    
     .tl-item { display: flex; gap: 0; }
-    .tl-left { width: 60px; flex-shrink: 0; padding-top: 2px; }
-    .tl-year { font-size: 10px; font-weight: 600; color: #B4B2A9; letter-spacing: 0.05em; }
+    .tl-left { width: 80px; flex-shrink: 0; padding-top: 2px; }
+    .tl-year { font-size: 12px; font-weight: 800; color: #0F172A; }
+    
     .tl-connector { display: flex; flex-direction: column; align-items: center; }
-    .tl-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
-    .tl-line { width: 1px; flex: 1; min-height: 24px; background: #D3D1C7; margin: 3px 0; }
-    .tl-body { flex: 1; padding: 0 0 18px 12px; }
-    .tl-name { font-size: 13px; font-weight: 500; color: #2C2C2A; }
-    .tl-name a { color: inherit; text-decoration: none; border-bottom: 1px solid #D3D1C7; transition: all 0.2s; }
-    .tl-name a:hover { color: #854F0B; border-color: #854F0B; }
-    .tl-cat { font-size: 10px; color: #B4B2A9; margin-top: 3px; text-transform: uppercase; letter-spacing: 0.08em; }
-    .stats-section { padding: 1.5rem 2rem; border-bottom: 1px solid #D3D1C7; }
-    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .stat-card { background: #fff; border: 1px solid #D3D1C7; border-radius: 6px; padding: 1rem; }
-    .stat-num { font-family: 'Playfair Display', serif; font-size: 26px; color: #2C2C2A; }
-    .stat-label { font-size: 11px; color: #888780; margin-top: 4px; line-height: 1.4; }
-    .chain-item { display: flex; gap: 12px; align-items: flex-start; padding: 0.8rem 0; border-bottom: 1px solid #EDE8DC; }
+    .tl-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; box-shadow: 0 0 0 4px #FFFFFF; }
+    .tl-line { width: 2px; flex: 1; min-height: 40px; background: #E2E8F0; margin: 4px 0; }
+    
+    .tl-body { flex: 1; padding: 0 0 24px 20px; }
+    .tl-name { font-size: 14px; font-weight: 700; color: #0F172A; }
+    .tl-name a { color: inherit; text-decoration: none; }
+    .tl-name a:hover { color: #2A7BFF; }
+    .tl-cat { 
+      font-size: 10px; 
+      font-weight: 800;
+      margin-top: 4px; 
+      text-transform: uppercase; 
+      letter-spacing: 0.05em; 
+    }
+    
+    /* Dynamic grid blocks imitating numerical tiles like "1.5K+" */
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    
+    .stat-card { 
+      background: #FFFFFF; 
+      border-radius: 20px; 
+      padding: 1.5rem; 
+      border: 1px solid #E2E8F0;
+      transition: transform 0.2s;
+    }
+    .stat-card:hover { transform: translateY(-2px); }
+    
+    .stat-num { font-size: 38px; font-weight: 800; color: #0F172A; letter-spacing: -1.5px; }
+    .stat-label { font-size: 12px; color: #475569; margin-top: 8px; line-height: 1.5; font-weight: 500; }
+    
+    /* Clean rows for rank indicators */
+    .chain-item { display: flex; gap: 16px; align-items: flex-start; padding: 1.25rem 0; border-bottom: 1px solid #E2E8F0; }
     .chain-item:last-child { border-bottom: none; }
-    .chain-rank { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; flex-shrink: 0; background: #EDE8DC; color: #2C2C2A; }
+    
+    .chain-rank { 
+      width: 32px; 
+      height: 32px; 
+      border-radius: 10px; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      font-size: 12px; 
+      font-weight: 800; 
+      flex-shrink: 0; 
+      background: #FFFFFF; 
+      color: #0F172A; 
+      border: 1px solid #E2E8F0;
+    }
+    
     .chain-info { flex: 1; }
-    .chain-node { font-size: 13px; font-weight: 500; color: #2C2C2A; }
-    .chain-node a { color: inherit; text-decoration: none; border-bottom: 1px solid #D3D1C7; }
-    .chain-node a:hover { color: #854F0B; }
-    .chain-meta { font-size: 11px; color: #B4B2A9; margin-top: 3px; }
-    .chain-bar { height: 3px; background: #EDE8DC; border-radius: 2px; margin-top: 6px; overflow: hidden; }
-    .chain-fill { height: 100%; border-radius: 2px; background: #B4B2A9; }
-    .narrative-section { padding: 1.5rem 2rem; border-bottom: 1px solid #D3D1C7; }
-    .narrative-text { font-size: 13px; line-height: 1.85; color: #5F5E5A; font-style: italic; }
-    .evolution-section { padding: 1.5rem 2rem; border-bottom: 1px solid #D3D1C7; }
-    .evo-item { margin-bottom: 1.2rem; padding-left: 1rem; border-left: 2px solid #D3D1C7; }
-    .evo-period { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #854F0B; margin-bottom: 4px; }
-    .evo-title { font-size: 13px; font-weight: 500; color: #2C2C2A; margin-bottom: 4px; }
-    .evo-desc { font-size: 12px; color: #888780; line-height: 1.6; }
-    .how { display: grid; grid-template-columns: repeat(4, 1fr); background: #2C2C2A; }
-    .how-step { padding: 1.5rem 1.2rem; border-right: 1px solid #3a3a38; }
+    .chain-node { font-size: 14px; font-weight: 700; color: #0F172A; }
+    .chain-node a { color: inherit; text-decoration: none; }
+    .chain-node a:hover { color: #2A7BFF; }
+    .chain-meta { font-size: 11px; font-weight: 600; color: #94A3B8; margin-top: 4px; }
+    
+    .chain-bar { height: 6px; background: #E2E8F0; border-radius: 9999px; margin-top: 10px; overflow: hidden; }
+    .chain-fill { height: 100%; border-radius: 9999px; transition: width 0.5s ease-out; }
+    
+    .narrative-section { background: #FFFFFF; border: 1px solid #E2E8F0; }
+    .narrative-text { 
+      font-size: 14px; 
+      line-height: 1.7; 
+      color: #334155; 
+      font-weight: 500;
+    }
+    
+    .evolution-section { background: #0F172A; color: #FFFFFF; border: none; }
+    .evolution-section .section-label { color: #94A3B8; }
+    
+    .evo-item { margin-bottom: 1.75rem; padding-left: 1.5rem; border-left: 2px solid #334155; }
+    .evo-item:last-child { margin-bottom: 0; border-left-color: #2A7BFF; }
+    .evo-period { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #2A7BFF; margin-bottom: 6px; }
+    .evo-title { font-size: 15px; font-weight: 700; color: #FFFFFF; margin-bottom: 6px; }
+    .evo-desc { font-size: 13px; color: #94A3B8; line-height: 1.6; font-weight: 400; }
+    
+    /* Footer step banner reflecting workflow metrics */
+    .how { display: grid; grid-template-columns: repeat(4, 1fr); background: #F8FAFC; border-top: 1px solid #E2E8F0; }
+    .how-step { padding: 3rem 2.5rem; border-right: 1px solid #E2E8F0; }
     .how-step:last-child { border-right: none; }
-    .how-num { font-family: 'Playfair Display', serif; font-size: 28px; color: #444441; margin-bottom: 8px; }
-    .how-title { font-size: 12px; font-weight: 600; color: #F5F0E8; margin-bottom: 4px; }
-    .how-desc { font-size: 11px; color: #888780; line-height: 1.6; }
-    footer { padding: 1rem 2.5rem; background: #EDE8DC; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #D3D1C7; }
-    footer p { font-size: 11px; color: #B4B2A9; }
-    .wiki-badge { font-size: 11px; color: #B4B2A9; display: flex; align-items: center; gap: 6px; }
-    .wiki-dot { width: 6px; height: 6px; border-radius: 50%; background: #888780; }
+    .how-num { font-size: 32px; font-weight: 800; color: #2A7BFF; opacity: 0.4; margin-bottom: 12px; }
+    .how-title { font-size: 12px; font-weight: 800; color: #0F172A; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .how-desc { font-size: 13px; color: #64748B; line-height: 1.5; font-weight: 500; }
+    
+    footer { padding: 2rem 3rem; background: #FFFFFF; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #F1F5F9; }
+    footer p { font-size: 12px; font-weight: 600; color: #94A3B8; }
+    .wiki-badge { font-size: 12px; font-weight: 600; color: #64748B; display: flex; align-items: center; gap: 8px; }
+    .wiki-dot { width: 8px; height: 8px; border-radius: 50%; background: #10B981; }
   </style>
 </head>
 <body>
 
-<header>
-  <div class="logo">Origin<span>Zero</span></div>
-  <div class="tagline">ADMI26 Hackathon · Origin Track</div>
-</header>
+<div class="app-container">
+  <header>
+    <div class="logo">Origin<span>Zero</span></div>
+    <div class="tagline">ADMI26 Hackathon · Origin Track</div>
+  </header>
 
-<div class="hero">
-  <h1>Where did it <em>really</em> start?</h1>
-  <p>OriginZero crawls Wikipedia, builds a knowledge graph, and uses PageRank to trace health disparities in underrepresented communities back to their true historical origins.</p>
-  <div class="topic-bar">
-    <button class="topic-btn active" onclick="selectTopic('diabetes', this)">Type 2 Diabetes</button>
-    <button class="topic-btn" onclick="selectTopic('maternal', this)">Maternal Mortality</button>
-    <button class="topic-btn" onclick="selectTopic('obesity', this)">Childhood Obesity</button>
-  </div>
-</div>
-
-<div class="main">
-  <div class="left">
-    <div class="section">
-      <div class="section-label">Knowledge Graph — 60 nodes · 474 edges</div>
-      <div id="graph-container"></div>
-      <div class="zoom-hint">Scroll to zoom · Drag to pan · Drag nodes to rearrange</div>
-    </div>
-    <div class="legend">
-      <div class="legend-item"><div class="legend-dot" style="background:#7a3030"></div>Historical</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#7a5c2e"></div>Economic</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#2e6e55"></div>Health</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#4a4580"></div>Social</div>
-    </div>
-    <div class="timeline-wrap">
-      <div class="section-label">Origin Timeline</div>
-      <div id="timeline"></div>
+  <div class="hero">
+    <div class="hero-content">
+      <h1>Where did it <em>really</em> start?</h1>
+      <p>OriginZero crawls Wikipedia, builds a knowledge graph, and uses PageRank to trace health disparities in underrepresented communities back to their true historical origins.</p>
+      <div class="topic-bar">
+        <button class="topic-btn active" onclick="selectTopic('diabetes', this)">Type 2 Diabetes</button>
+        <button class="topic-btn" onclick="selectTopic('maternal', this)">Maternal Mortality</button>
+        <button class="topic-btn" onclick="selectTopic('obesity', this)">Childhood Obesity</button>
+      </div>
     </div>
   </div>
 
-  <div class="right">
-    <div class="stats-section">
-      <div class="section-label">Key Statistics</div>
-      <div class="stats-grid" id="stats-grid"></div>
+  <div class="main">
+    <div class="left">
+      <div class="card-panel">
+        <div class="section-label">Knowledge Graph Engine — 60 nodes · 474 edges</div>
+        <div id="graph-container"></div>
+        <div class="zoom-hint">Scroll to zoom · Drag canvas to pan · Drag individual elements to reorganize layout</div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#EF4444"></div>Historical</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#F59E0B"></div>Economic</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#10B981"></div>Health</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#3B82F6"></div>Social</div>
+        </div>
+      </div>
+      
+      <div class="card-panel">
+        <div class="section-label">Origin Chronology Timeline</div>
+        <div class="timeline-wrap">
+          <div id="timeline"></div>
+        </div>
+      </div>
     </div>
-    <div class="section">
-      <div class="section-label">PageRank Origin Chain — Top 10 Root Causes</div>
-      <div id="origin-chain"></div>
-    </div>
-    <div class="narrative-section">
-      <div class="section-label">AI-Generated Origin Narrative</div>
-      <p class="narrative-text" id="narrative-text"></p>
-    </div>
-    <div class="evolution-section">
-      <div class="section-label">How It Evolved</div>
-      <div id="evolution"></div>
+
+    <div class="right">
+      <div class="featured-panel">
+        <div class="section-label">Key Statistics</div>
+        <div class="stats-grid" id="stats-grid"></div>
+      </div>
+      
+      <div class="card-panel">
+        <div class="section-label">PageRank Origin Chain — Top 10 Root Vectors</div>
+        <div id="origin-chain"></div>
+      </div>
+      
+      <div class="card-panel narrative-section">
+        <div class="section-label">AI-Generated Origin Narrative</div>
+        <p class="narrative-text" id="narrative-text"></p>
+      </div>
+      
+      <div class="card-panel evolution-section">
+        <div class="section-label">How It Evolved</div>
+        <div id="evolution"></div>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="how">
-  <div class="how-step"><div class="how-num">01</div><div class="how-title">Crawl Wikipedia</div><div class="how-desc">Live API pulls articles and links connected to the topic — seeding the knowledge tree</div></div>
-  <div class="how-step"><div class="how-num">02</div><div class="how-title">Build Graph</div><div class="how-desc">NetworkX constructs a directed graph of 60+ nodes and 474 edges from real Wikipedia data</div></div>
-  <div class="how-step"><div class="how-num">03</div><div class="how-title">Run PageRank</div><div class="how-desc">Algorithm scores every node by influence — separating true root causes from related topics</div></div>
-  <div class="how-step"><div class="how-num">04</div><div class="how-title">AI Narrative</div><div class="how-desc">Groq llama3 reads the ranked chain and generates a plain English origin story in seconds</div></div>
-</div>
+  <div class="how">
+    <div class="how-step"><div class="how-num">01</div><div class="how-title">Crawl Network</div><div class="how-desc">Live API pulls articles and links connected to the topic — seeding the knowledge tree</div></div>
+    <div class="how-step"><div class="how-num">02</div><div class="how-title">Assemble Graph</div><div class="how-desc">NetworkX constructs a directed graph of 60+ nodes and 474 edges from real Wikipedia data</div></div>
+    <div class="how-step"><div class="how-num">03</div><div class="how-title">Run PageRank</div><div class="how-desc">Algorithm scores every node by influence — separating true root causes from related topics</div></div>
+    <div class="how-step"><div class="how-num">04</div><div class="how-title">AI Narrative</div><div class="how-desc">Groq Llama3 generates the plain English origin story, with fine-tuned Gemma-4 as a general fallback.</div></div>
+  </div>
 
-<footer>
-  <p>OriginZero · Built at ADMI26 Hackathon · Origin Track</p>
-  <div class="wiki-badge"><div class="wiki-dot"></div>Powered by Wikipedia API · NetworkX · PageRank · Groq llama3</div>
-</footer>
+  <footer>
+    <p>OriginZero ·  Built at ADMI26 Hackathon · Origin Track</p>
+    <div class="wiki-badge"><div class="wiki-dot"></div>Powered by Wikipedia API · NetworkX · PageRank · Groq llama3 · Gemmma-4-E2B</div>
+  </footer>
+</div>
 
 <script>
 const COLORS = {
-  historical: "#7a3030",
-  economic:   "#7a5c2e",
-  health:     "#2e6e55",
-  social:     "#4a4580"
+  historical: "#EF4444", 
+  economic:   "#F59E0B", 
+  health:     "#10B981", 
+  social:     "#3B82F6"  
 };
 
-const TOPICS = {
-  diabetes: {
-    stats: [
-      { num: "60%", label: "More likely for Black Americans to be diagnosed with Type 2 diabetes" },
-      { num: "37M",  label: "Americans living with diabetes today" },
-      { num: "1930s", label: "When redlining created food deserts that persist today" },
-      { num: "400yr", label: "Origin chain traced back through Wikipedia" }
-    ],
-    chain: [
-      { rank:1,  node:"African-American history",   score:0.0497, year:"1619",  category:"historical" },
-      { rank:2,  node:"Diet (nutrition)",            score:0.0485, year:"1800s", category:"health" },
-      { rank:3,  node:"African Americans",           score:0.0482, year:"1865",  category:"social" },
-      { rank:4,  node:"African-American diaspora",   score:0.0464, year:"1900s", category:"social" },
-      { rank:5,  node:"Healthy diet",                score:0.0387, year:"1930s", category:"health" },
-      { rank:6,  node:"Childhood obesity",           score:0.0248, year:"1960s", category:"health" },
-      { rank:7,  node:"History of diabetes",         score:0.0217, year:"1980s", category:"historical" },
-      { rank:8,  node:"Nutrition",                   score:0.0201, year:"1990s", category:"health" },
-      { rank:9,  node:"Obesity",                     score:0.0189, year:"2000s", category:"health" },
-      { rank:10, node:"Community health",            score:0.0175, year:"Today", category:"social" }
-    ],
-    evolution: [
-      { period:"1619 — 1865",   title:"Slavery & Forced Labor",      desc:"Enslaved Africans were stripped of food sovereignty. Diets were controlled by enslavers — high calorie, low nutrition — creating metabolic patterns that persisted for generations." },
-      { period:"1865 — 1930s",  title:"Reconstruction Failure",      desc:"Freed people were denied land redistribution. Without economic stability, Black families were locked into poverty and poor nutrition." },
-      { period:"1930s — 1960s", title:"Redlining & Food Deserts",    desc:"Federal housing policy denied mortgages to Black neighborhoods. Supermarkets left, fast food arrived, and food deserts became structural." },
-      { period:"1960s — 1990s", title:"Fast Food Targeting",         desc:"Fast food companies deliberately targeted low-income minority neighborhoods. Calorie-dense, nutrient-poor food became the primary affordable option." },
-      { period:"1990s — Today", title:"Chronic Disease Crisis",      desc:"Decades of structural food insecurity culminated in Black Americans being 60% more likely to develop Type 2 diabetes than white Americans." }
-    ],
-    narrative: "The disproportionate impact of Type 2 diabetes on African American and underrepresented communities has its roots in centuries of historical, social, and economic injustices. The transatlantic slave trade and subsequent segregation forced African Americans into poverty, limiting access to healthy food, safe living conditions, and quality healthcare. The legacy of these disparities persists, with many communities of color facing food deserts, inadequate nutrition, and restricted opportunities for physical activity. Change requires acknowledging and dismantling the social and economic barriers that have led to this crisis."
-  },
-  maternal: {
-    stats: [
-      { num: "3×",   label: "Black women die in childbirth compared to white women in the US" },
-      { num: "1800s", label: "When medical experimentation on enslaved women began" },
-      { num: "700+", label: "Women die each year from pregnancy-related causes in the US" },
-      { num: "80%",  label: "Of maternal deaths are preventable with equal care access" }
-    ],
-    chain: [
-      { rank:1,  node:"Racism in the United States", score:0.0521, year:"1619",  category:"historical" },
-      { rank:2,  node:"African-American history",    score:0.0498, year:"1800s", category:"historical" },
-      { rank:3,  node:"Maternal death",              score:0.0461, year:"1865",  category:"health" },
-      { rank:4,  node:"Health disparities",          score:0.0443, year:"1900s", category:"health" },
-      { rank:5,  node:"Poverty in the United States",score:0.0398, year:"1930s", category:"economic" },
-      { rank:6,  node:"Implicit bias",               score:0.0351, year:"1960s", category:"social" },
-      { rank:7,  node:"Prenatal care",               score:0.0312, year:"1980s", category:"health" },
-      { rank:8,  node:"Segregation",                 score:0.0287, year:"1990s", category:"historical" },
-      { rank:9,  node:"Income inequality",           score:0.0241, year:"2000s", category:"economic" },
-      { rank:10, node:"Medical discrimination",      score:0.0198, year:"Today", category:"social" }
-    ],
-    evolution: [
-      { period:"1600s — 1865",  title:"Medical Experimentation",       desc:"J. Marion Sims developed gynecological techniques by experimenting on enslaved Black women without anesthesia, building a system that disregarded Black pain." },
-      { period:"1865 — 1910s",  title:"Exclusion from Medical Training",desc:"Black physicians were denied entry to medical schools. Separate, underfunded Black hospitals formed out of necessity." },
-      { period:"1930s — 1960s", title:"Segregated Hospitals",           desc:"Hill-Burton Act hospitals received federal funding while legally segregating patients. Black women delivered in inferior wards with fewer resources." },
-      { period:"1960s — 2000s", title:"Pain Bias Enters Practice",      desc:"Studies show medical providers systematically underestimate pain in Black patients. Pregnancy complaints are dismissed more often — a deadly pattern." },
-      { period:"2000s — Today", title:"The Crisis Persists",            desc:"Black women still die in childbirth at 3x the rate of white women. The cause is documented, systemic, and traceable — not biological." }
-    ],
-    narrative: "Black women in the United States die in childbirth at three times the rate of white women — a crisis rooted not in biology but in history. Centuries of racism, from medical experimentation on enslaved women to systematic exclusion from quality healthcare, created a system that consistently undervalues Black women's pain and health concerns. Poverty, segregation, and implicit bias compound this legacy, leaving Black mothers vulnerable at the moment they need care most."
-  },
-  obesity: {
-    stats: [
-      { num: "2×",   label: "Higher childhood obesity rates in low-income vs high-income communities" },
-      { num: "1934", label: "When federal redlining created today's food deserts" },
-      { num: "23.5M",label: "Americans live in food deserts with no supermarket access" },
-      { num: "40%",  label: "Of children in low-income neighborhoods are food insecure" }
-    ],
-    chain: [
-      { rank:1,  node:"Food desert",                 score:0.0534, year:"1930s", category:"economic" },
-      { rank:2,  node:"Poverty in the United States",score:0.0498, year:"1865",  category:"economic" },
-      { rank:3,  node:"Redlining",                   score:0.0467, year:"1934",  category:"historical" },
-      { rank:4,  node:"African-American history",    score:0.0441, year:"1619",  category:"historical" },
-      { rank:5,  node:"Nutrition",                   score:0.0389, year:"1950s", category:"health" },
-      { rank:6,  node:"Fast food",                   score:0.0342, year:"1960s", category:"economic" },
-      { rank:7,  node:"Income inequality",           score:0.0298, year:"1980s", category:"economic" },
-      { rank:8,  node:"Urban disinvestment",         score:0.0261, year:"1990s", category:"social" },
-      { rank:9,  node:"School nutrition",            score:0.0224, year:"2000s", category:"health" },
-      { rank:10, node:"Community health",            score:0.0187, year:"Today", category:"social" }
-    ],
-    evolution: [
-      { period:"1619 — 1865",  title:"Controlled Food Access",         desc:"Enslaved people had no control over what they ate. Diets designed for labor output, not nutrition, created generational metabolic disadvantages." },
-      { period:"1865 — 1934",  title:"Economic Exclusion",             desc:"Without land or capital, Black families concentrated in urban areas with limited food access. Poverty made nutritious food a luxury." },
-      { period:"1934 — 1960s", title:"Redlining Creates Food Deserts", desc:"Federal maps designated Black neighborhoods as high-risk, blocking investment. Grocery stores left, corner stores and fast food moved in." },
-      { period:"1960s — 1990s",title:"Fast Food Fills the Gap",        desc:"Fast food companies aggressively expanded into low-income minority neighborhoods. Dense placement made it the primary affordable food source." },
-      { period:"1990s — Today",title:"Childhood Obesity Crisis",       desc:"Children in food deserts face obesity rates double those of affluent peers. The origin is geography and policy — not personal choice." }
-    ],
-    narrative: "Childhood obesity in underrepresented communities is not a failure of individual families — it is the predictable result of decades of deliberate policy. Redlining in the 1930s locked minority families out of wealthy neighborhoods, concentrating poverty in areas that would later become food deserts. Without supermarkets, without safe spaces to exercise, and without economic resources to choose healthier options, generations of children grew up in environments designed to make healthy living impossible."
-  }
-};
+function extimate_category_based_on_node_name(node_name) {
+  const name = node_name.toLowerCase();
+  if (name.includes("history") || name.includes("slavery") || name.includes("segregation") || name.includes("redlining")) return "historical";
+  if (name.includes("poverty") || name.includes("income") || name.includes("economic") || name.includes("food desert")) return "economic";
+  if (name.includes("diabetes") || name.includes("obesity") || name.includes("nutrition") || name.includes("health")) return "health";
+  if (name.includes("community") || name.includes("social") || name.includes("bias")) return "social";
+  return "social"; 
+}
 
+let TOPICS = {};
 let currentTopic = "diabetes";
+
+async function initApplication() {
+  try {
+    const [res1, res2, res3] = await Promise.all([
+      fetch("./data_chains/diabetes_chain.json"),
+      fetch("./data_chains/maternal_mortality_chain.json"),
+      fetch("./data_chains/childhood_obesity_chain.json")
+    ]);
+
+    const [res1_narrative, res2_narrative, res3_narrative] = await Promise.all([
+      fetch("./narratives/narrative_diabetes.txt"),
+      fetch("./narratives/narrative_maternal.txt"),
+      fetch("./narratives/narrative_obesity.txt")
+    ]);
+
+    const diabetes_chain_raw = await res1.json();
+    const maternal_chain_raw = await res2.json();
+    const obesity_chain_raw = await res3.json();
+
+    const narrative_diabetes = await res1_narrative.text();
+    const narrative_maternal = await res2_narrative.text();
+    const narrative_obesity = await res3_narrative.text();
+
+    for (let i = 0; i < diabetes_chain_raw.length; i++) {
+      diabetes_chain_raw[i].category = extimate_category_based_on_node_name(diabetes_chain_raw[i].node);
+      diabetes_chain_raw[i].year = diabetes_chain_raw[i].year || "Unknown"; 
+    }
+
+    for (let i = 0; i < maternal_chain_raw.length; i++) {
+      maternal_chain_raw[i].category = extimate_category_based_on_node_name(maternal_chain_raw[i].node);
+      maternal_chain_raw[i].year = maternal_chain_raw[i].year || "Unknown"; 
+    }
+
+    for (let i = 0; i < obesity_chain_raw.length; i++) {
+      obesity_chain_raw[i].category = extimate_category_based_on_node_name(obesity_chain_raw[i].node);
+      obesity_chain_raw[i].year = obesity_chain_raw[i].year || "Unknown"; 
+    }
+
+    TOPICS = {
+      diabetes: {
+        stats: [
+          { num: "60%", label: "Increased systemic variant risk profile indicators for targeted demographics." },
+          { num: "37M",  label: "Active case instances currently managed across domestic tracking boundaries." },
+          { num: "1930s", label: "Initial spatial layout design vector maps creating modern food deserts." },
+          { num: "400y", label: "Temporal timeline tracking depth navigated via connection engine paths." }
+        ],
+        chain: diabetes_chain_raw,
+        evolution: [
+          { period:"1619 — 1865",   title:"Slavery & Forced Labor",      desc:"Enslaved Africans were stripped of food sovereignty. Diets were controlled by enslavers — high calorie, low nutrition — creating metabolic patterns that persisted for generations." },
+          { period:"1865 — 1930s",  title:"Reconstruction Failure",      desc:"Freed people were denied land redistribution. Without economic stability, Black families were locked into poverty and poor nutrition." },
+          { period:"1930s — 1960s", title:"Redlining & Food Deserts",    desc:"Federal housing policy denied mortgages to Black neighborhoods. Supermarkets left, fast food arrived, and food deserts became structural." },
+          { period:"1960s — 1990s", title:"Fast Food Targeting",         desc:"Fast food companies deliberately targeted low-income minority neighborhoods. Calorie-dense, nutrient-poor food became the primary affordable option." },
+          { period:"1990s — Today", title:"Chronic Disease Crisis",      desc:"Decades of structural food insecurity culminated in Black Americans being 60% more likely to develop Type 2 diabetes than white Americans." }
+        ],
+        narrative: narrative_diabetes
+      },
+      maternal: {
+        stats: [
+          { num: "3×",   label: "Mortality differential factor recorded within core clinical delivery fields." },
+          { num: "1800s", label: "Historical foundation tracking baseline for clinical processing testing." },
+          { num: "700+", label: "Preventable structural events recorded across operational system cycles." },
+          { num: "80%",  label: "Preventable variance threshold capacity with equitable optimization." }
+        ],
+        chain: maternal_chain_raw,
+        evolution: [
+          { period:"1600s — 1865",  title:"Medical Experimentation",       desc:"J. Marion Sims developed gynecological techniques by experimenting on enslaved Black women without anesthesia..." },
+          { period:"1865 — 1910s",  title:"Exclusion from Medical Training",desc:"Black physicians were denied entry to medical schools..." },
+          { period:"1930s — 1960s", title:"Segregated Hospitals",           desc:"Hill-Burton Act hospitals received federal funding while legally segregating patients..." },
+          { period:"1960s — 2000s", title:"Pain Bias Enters Practice",      desc:"Studies show medical providers systematically underestimate pain in Black patients..." },
+          { period:"2000s — Today", title:"The Crisis Persists",            desc:"Black women still die in childbirth at 3x the rate of white women..." }
+        ],
+        narrative: narrative_maternal
+      },
+      obesity: {
+          stats: [
+            { num: "2×",   label: "Observed condition distribution matrix factor within low-resource sectors." },
+            { num: "1934", label: "Initial structural policy deployment mapping resource distribution lanes." },
+            { num: "23.5M",label: "Total pop metrics currently operating under localized geographic desert parameters." },
+            { num: "40%",  label: "Systemic food security variance thresholds flagged across development fields." }
+          ],
+          chain: obesity_chain_raw,
+          evolution: [
+            { period:"1619 — 1865",  title:"Controlled Food Access",         desc:"Enslaved people had no control over what they ate. Diets designed for labor output, not nutrition, created generational metabolic disadvantages." },
+            { period:"1865 — 1934",  title:"Economic Exclusion",             desc:"Without land or capital, Black families concentrated in urban areas with limited food access. Poverty made nutritious food a luxury." },
+            { period:"1934 — 1960s", title:"Redlining Creates Food Deserts", desc:"Federal maps designated Black neighborhoods as high-risk, blocking investment. Grocery stores left, corner stores and fast food moved in." },
+            { period:"1960s — 1990s",title:"Fast Food Fills the Gap",        desc:"Fast food companies aggressively expanded into low-income minority neighborhoods. Dense placement made it the primary affordable food source." },
+            { period:"1990s — Today",title:"Childhood Obesity Crisis",       desc:"Children in food deserts face obesity rates double those of affluent peers. The origin is geography and policy — not personal choice." }
+          ],
+          narrative: narrative_obesity
+      }
+    };
+
+    loadData();
+
+  } catch (error) {
+    console.error("Failed to fetch or process chain data:", error);
+  }
+}
 
 function selectTopic(topic, btn) {
   currentTopic = topic;
@@ -251,6 +515,8 @@ function selectTopic(topic, btn) {
 }
 
 function loadData() {
+  if (!TOPICS[currentTopic]) return;
+
   const data = TOPICS[currentTopic];
   renderStats(data.stats);
   renderChain(data.chain);
@@ -269,14 +535,16 @@ function renderStats(stats) {
 }
 
 function renderChain(chain) {
-  const max = chain[0].score;
+  if (!chain || chain.length === 0) return; 
+
+  const max = chain[0].score || 1; 
   document.getElementById("origin-chain").innerHTML = chain.map(item => `
     <div class="chain-item">
       <div class="chain-rank">${item.rank}</div>
       <div class="chain-info">
         <div class="chain-node"><a href="https://en.wikipedia.org/wiki/${encodeURIComponent(item.node)}" target="_blank">${item.node}</a></div>
         <div class="chain-meta">${item.year} · ${item.category} · score: ${item.score}</div>
-        <div class="chain-bar"><div class="chain-fill" style="width:${(item.score/max*100).toFixed(0)}%"></div></div>
+        <div class="chain-bar"><div class="chain-fill" style="width:${(item.score/max*100).toFixed(0)}%; background-color:${COLORS[item.category]}"></div></div>
       </div>
     </div>`).join("");
 }
@@ -295,7 +563,7 @@ function renderTimeline(chain) {
       </div>
       <div class="tl-body">
         <div class="tl-name"><a href="https://en.wikipedia.org/wiki/${encodeURIComponent(item.node)}" target="_blank">${item.node}</a></div>
-        <div class="tl-cat">${item.category}</div>
+        <div class="tl-cat" style="color:${COLORS[item.category]}">${item.category}</div>
       </div>
     </div>`).join("");
 }
@@ -310,6 +578,7 @@ function renderEvolution(evolution) {
 }
 
 function renderGraph(chain) {
+  
   const container = document.getElementById("graph-container");
   container.innerHTML = "";
   const width = container.offsetWidth;
@@ -329,11 +598,11 @@ function renderGraph(chain) {
     .force("collision", d3.forceCollide().radius(d => 14 + d.score * 220));
 
   const link = g.append("g").selectAll("line").data(links).join("line")
-    .attr("stroke","#D3D1C7").attr("stroke-width",1.5);
+    .attr("stroke","#CBD5E1").attr("stroke-width",4);
 
   const node = g.append("g").selectAll("circle").data(nodes).join("circle")
     .attr("r", d => 8 + d.score * 200)
-    .attr("fill", d => COLORS[d.category] + "33")
+    .attr("fill", d => COLORS[d.category] + "26") 
     .attr("stroke", d => COLORS[d.category])
     .attr("stroke-width", 2)
     .call(d3.drag()
@@ -342,14 +611,14 @@ function renderGraph(chain) {
       .on("end",(e,d)=>{ if(!e.active) simulation.alphaTarget(0); d.fx=null; d.fy=null; }));
 
   const labelBg = g.append("g").selectAll("rect").data(nodes).join("rect")
-    .attr("fill","#ffffffdd").attr("rx",3).attr("height",15);
+    .attr("fill","#ffffffF2").attr("rx",6).attr("height",18);
 
   const label = g.append("g").selectAll("text").data(nodes).join("text")
     .text(d => d.id)
     .attr("font-size", 11)
     .attr("font-family", "Inter, sans-serif")
-    .attr("fill","#2C2C2A")
-    .attr("font-weight","500")
+    .attr("fill","#0F172A")
+    .attr("font-weight","700")
     .attr("text-anchor","middle");
 
   simulation.on("tick",()=>{
@@ -358,13 +627,13 @@ function renderGraph(chain) {
     node.attr("cx",d=>d.x).attr("cy",d=>d.y);
     label.attr("x",d=>d.x).attr("y",d=>d.y-(8+d.score*200)-6);
     labelBg
-      .attr("x",d=>d.x - d.id.length*3.2)
-      .attr("y",d=>d.y-(8+d.score*200)-18)
-      .attr("width",d=>d.id.length*6.4);
+      .attr("x",d=>d.x - d.id.length*3.2 - 6)
+      .attr("y",d=>d.y-(8+d.score*200)-19)
+      .attr("width",d=>d.id.length*6.4 + 12);
   });
 }
 
-loadData();
+initApplication();
 </script>
 </body>
 </html>
