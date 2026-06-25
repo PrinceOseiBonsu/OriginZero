@@ -1,9 +1,10 @@
 import json
+import os
 import networkx as nx
 import matplotlib.pyplot as plt
 
 # Load the crawled data
-with open("data.json", "r") as f:
+with open(os.path.join(os.path.dirname(__file__), "../data.json"), "r") as f:
     data = json.load(f)
 
 # Build the graph
@@ -58,15 +59,15 @@ filtered = [
 # Re-sort after boosting
 filtered = sorted(filtered, key=lambda x: x[1], reverse=True)
 
-print("\n--- TOP 10 ORIGIN CAUSE NODES ---")
-for i, (node, score) in enumerate(filtered[:10]):
+print("\n--- TOP 20 ORIGIN CAUSE NODES ---")
+for i, (node, score) in enumerate(filtered[:20]):
     print(f"{i+1}. {node} (score: {round(score, 4)})")
 
 # Save ranked chain to JSON for Person 4
 output = [{"rank": i+1, "node": node, "score": round(score, 4)} 
-          for i, (node, score) in enumerate(filtered[:10])]
+          for i, (node, score) in enumerate(filtered[:20])]
 
-with open("origin_chain.json", "w") as f:
+with open(os.path.join(os.path.dirname(__file__), "../origin_chain.json"), "w") as f:
     json.dump(output, f, indent=2)
 
 print("\nOrigin chain saved to origin_chain.json")

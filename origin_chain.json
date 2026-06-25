@@ -48,5 +48,55 @@
     "rank": 10,
     "node": "Dietary fiber",
     "score": 0.0217
+  },
+  {
+    "rank": 11,
+    "node": "Type 2 diabetes",
+    "score": 0.0181
+  },
+  {
+    "rank": 12,
+    "node": "Constitutional history",
+    "score": 0.0159
+  },
+  {
+    "rank": 13,
+    "node": "African historiography",
+    "score": 0.0147
+  },
+  {
+    "rank": 14,
+    "node": "Auxiliary sciences of history",
+    "score": 0.0145
+  },
+  {
+    "rank": 15,
+    "node": "Big History",
+    "score": 0.0145
+  },
+  {
+    "rank": 16,
+    "node": "Business history",
+    "score": 0.0145
+  },
+  {
+    "rank": 17,
+    "node": "Cambridge School (imperial history)",
+    "score": 0.0145
+  },
+  {
+    "rank": 18,
+    "node": "Canadian history wars",
+    "score": 0.0145
+  },
+  {
+    "rank": 19,
+    "node": "Consensus history",
+    "score": 0.0145
+  },
+  {
+    "rank": 20,
+    "node": "Food and Drug Administration",
+    "score": 0.0112
   }
 ]
