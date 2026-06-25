@@ -8,7 +8,7 @@ By combining automated Wikipedia network crawling, PageRank topology analysis, a
 
 ## Core Features
 
-* **Contextual Knowledge Crawling (`crawler.py`):** Deep-crawls Wikipedia layers targeted at tracking historical and environmental vectors (e.g., redlining, food deserts, poverty).
+* **Contextual Knowledge Crawling (`wikipedia_fetcher.py`):** Deep-crawls Wikipedia layers targeted at tracking historical and environmental vectors (e.g., redlining, food deserts, poverty).
 * **Graph-Topology Anchoring (`graph.py`, `*_origin.py`):** Leverages NetworkX to build Directed Graphs. Uses **Personalized PageRank** across balanced pillars to find mathematically significant structural nodes without algorithmic bias.
 * **Narrative Generation (`generate_narrative.py`):** Client script that queries the inference engine to produce a plain-English narrative of the root causes of health disparities.
 * **Visualization & Reporting:** Generates interactive visualizations of the knowledge graph, PageRank scores, and evolution of the structural network.
