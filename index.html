@@ -563,6 +563,17 @@ async function selectTone(tone, btn) {
   const previousText = narrativeEl.textContent;
   document.getElementById("narrative-error")?.remove();
   narrativeEl.textContent = "Generating narrative...";
+  const [res1_narrative, res2_narrative, res3_narrative] = await Promise.all([
+    fetch(`./narratives/narrative_diabetes_${currentTone}.txt`),
+    fetch(`./narratives/narrative_maternal_${currentTone}.txt`),
+    fetch(`./narratives/narrative_obesity_${currentTone}.txt`)
+  ]);
+
+  const [narrative_diabetes, narrative_maternal, narrative_obesity] = await Promise.all([
+    res1_narrative.text(),
+    res2_narrative.text(),
+    res3_narrative.text()
+  ]);
 
   try {
     const topic = TOPIC_API_NAMES[currentTopic];
@@ -572,7 +583,8 @@ async function selectTone(tone, btn) {
     renderNarrative(data.narrative);
   } catch (error) {
     console.error("Failed to generate live narrative:", error);
-    narrativeEl.textContent = previousText;
+    renderNarrative(currentTopic === "diabetes" ? narrative_diabetes : currentTopic === "maternal" ? narrative_maternal : narrative_obesity);
+    // narrativeEl.textContent = previousText;
     narrativeEl.insertAdjacentHTML("afterend", `<p id="narrative-error" style="color:#EF4444; font-size:12px; margin-top:8px;">Couldn't reach the narrative API at ${NARRATIVE_API} — showing the cached narrative instead.</p>`);
   }
 }
