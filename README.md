@@ -4,7 +4,26 @@
 
 By combining automated Wikipedia network crawling, PageRank topology analysis, and fine-tuned Large Language Models (LLMs), OriginZero synthesizes dense, highly accurate structural narratives instead of relying purely on biomedical explanations.
 
----
+
+
+## Goals
+* Identify the historical and institutional 
+chains that drive health disparities, going 
+past correlated risk factors to the decisions 
+that created them.
+* Build a graph based method for ranking 
+causal significance that is reproducible and 
+does not depend on a researcher's prior 
+assumptions about what matters.
+* Turn that graph structure into a narrative 
+that a non specialist, a journalist, a 
+policymaker, a student, can read once and 
+actually understand.
+* Prove the approach works across more 
+than one disparity, so the method is 
+judged on its design, not on luck with a 
+single dataset.
+
 
 ## Core Features
 
@@ -17,7 +36,8 @@ By combining automated Wikipedia network crawling, PageRank topology analysis, a
 * **Hardware-Accelerated Inference Engine (`inference.py`):** A production-ready FastAPI service backed by Unsloth for ultra-fast, 4-bit quantized narrative generation using fine-tuned models.
 * **Supervised Fine-Tuning:** Supports fine-tuning of LLMs with domain-specific datasets for improved narrative accuracy.
 
----
+
+
 
 ## Setup & Installation
 
