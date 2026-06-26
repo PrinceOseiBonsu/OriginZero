@@ -147,7 +147,7 @@ The `data_generator.py` script distills raw graph contexts into a structural ins
 
 The `inference.py` script spins up a high-performance **FastAPI** server optimized with **Unsloth 4-bit quantization**.
 
-### `POST /v1/generate-narrative`
+### `POST /v1/generate`
 
 Generates a plain-English structural narrative from a given graph state or context.
 
@@ -155,8 +155,9 @@ Generates a plain-English structural narrative from a given graph state or conte
 
 ```json
 {
-  "topic": "childhood_obesity",
-  "top_k_nodes": 5,
+  "instruction": "Analyze the underlying social, institutional, and root causes linking to 'Type 2 diabetes' using the extracted knowledge graph relationships and source text.",
+  "context": "KNOWLEDGE GRAPH CONNECTIONS:\nFact #1: 'Type 2 diabetes' features a systemic link to high-impact node 'Low-carbohydrate diet' (Network Weight Score: 0.2451).\nFact #2: 'Type 2 diabetes' features a systemic link to high-impact node 'Low-fat diet' (Network Weight Score: 0.1892).\nFact #3: 'Type 2 diabetes' features a systemic link to high-impact node 'Weight loss' (Network Weight Score: 0.1143).\n\nRAW ARTICLE EXTRACT:\nType 2 diabetes (T2D), formerly known as adult-onset diabetes, is a form of diabetes mellitus that is characterized by high blood sugar, insulin resistance, and relative lack of insulin. Common symptoms include increased thirst, frequent urination, fatigue and unexplained weight loss. Long-term complications from high blood sugar include heart disease.",
+  "max_new_tokens": 256,
   "temperature": 0.3
 }
 
