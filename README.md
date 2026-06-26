@@ -167,9 +167,9 @@ Generates a plain-English structural narrative from a given graph state or conte
 
 ```json
 {
-  "status": "success",
-  "model": "Gemma-4-E2B-OriginZero-4bit",
-  "narrative": "Childhood obesity disparities are strongly tied to zip-code level infrastructure..."
+  "response": "Childhood obesity disparities are strongly tied to zip-code level infrastructure..."
 }
 
 ```
+
+> **Note:** Model Adapter Location `AnthonyNwafor/originzero-gemma-4`
